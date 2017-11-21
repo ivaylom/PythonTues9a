@@ -42,5 +42,14 @@ class _2048:
                 _2048.moveRow(row, d)
         if direction == "up" or direction == "down":
             # Homework
+            for i in range(4):
+                col = list(map(lambda row: row[i], self.board))
+                d = 0
+                if (direction == "down"):
+                    d = 1
+                _2048.moveRow(col, d)
+                list(map(_2048.assign, self.board, col, [i] * 4))
+    def assign(row, e, i):
+        row[i] = e
 
     

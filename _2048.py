@@ -17,5 +17,5 @@ engine.addItem()
 engine.addItem()
 print(engine.board)
 
-engine.move("right")
+engine.move("down")
 print(engine.board)
