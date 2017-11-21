@@ -29,7 +29,15 @@ class _2048:
                     a = row[i]
                     row[i] = row[j]
                     row[j] = a
-
+    
+    def addNumbers(row, d):
+        for i in range(3):
+            if d == 0 and row[i] == row[i+1]:
+                row[i] *= 2
+                row[i+1] = 0
+            if d == 1 and row[3-i] == row[2-i]:
+                row[3-i] *= 2
+                row[2-i] = 0
 
     def move(self, direction):
         """Mesti elementite v posoka i dobavya nov"""
@@ -40,6 +48,8 @@ class _2048:
                 if (direction == "right"):
                     d = 1
                 _2048.moveRow(row, d)
+                _2048.addNumbers(row, d)
+                _2048.moveRow(row, d)
         if direction == "up" or direction == "down":
             # Homework
             for i in range(4):
@@ -48,7 +58,10 @@ class _2048:
                 if (direction == "down"):
                     d = 1
                 _2048.moveRow(col, d)
+                _2048.addNumbers(col, d)
+                _2048.moveRow(col, d)
                 list(map(_2048.assign, self.board, col, [i] * 4))
+        self.addItem()
     def assign(row, e, i):
         row[i] = e
 

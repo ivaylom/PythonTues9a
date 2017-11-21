@@ -6,16 +6,16 @@ def callback(e):
 
 t.bind("<Up>", callback)
 t.mainloop()
-"""
+5"""
 
 import _2048engine
 
 engine = _2048engine._2048()
 engine.addItem()
-engine.addItem()
-engine.addItem()
-engine.addItem()
 print(engine.board)
-
-engine.move("down")
+for i in range(100):
+    engine.move("right")
+    engine.move("down")
+    engine.move("up")
+    engine.move("left")
 print(engine.board)
