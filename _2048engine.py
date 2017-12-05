@@ -42,25 +42,26 @@ class _2048:
     def move(self, direction):
         """Mesti elementite v posoka i dobavya nov"""
         """direction = [up, down, left, right]"""
-        if direction == "left" or direction == "right":
+        if direction == "Left" or direction == "Right":
             for row in self.board:
                 d = 0
-                if (direction == "right"):
+                if (direction == "Right"):
                     d = 1
                 _2048.moveRow(row, d)
                 _2048.addNumbers(row, d)
                 _2048.moveRow(row, d)
-        if direction == "up" or direction == "down":
+        elif direction == "Up" or direction == "Down":
             # Homework
             for i in range(4):
                 col = list(map(lambda row: row[i], self.board))
                 d = 0
-                if (direction == "down"):
+                if (direction == "Down"):
                     d = 1
                 _2048.moveRow(col, d)
                 _2048.addNumbers(col, d)
                 _2048.moveRow(col, d)
                 list(map(_2048.assign, self.board, col, [i] * 4))
+        else: raise "Error"
         self.addItem()
     def assign(row, e, i):
         row[i] = e
