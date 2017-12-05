@@ -65,4 +65,13 @@ class _2048:
     def assign(row, e, i):
         row[i] = e
 
+    def printBoard(self):
+        for row in self.board:
+            rowString = ""
+            for i in row:
+                rowString += "{:5d} ".format(i)
+            print(rowString)
+
+
+
     
