@@ -22,13 +22,13 @@ class _2048:
         """row = [0,2,0,4]"""
         """d = [0,1]"""
 
-        for i in range(len(row)):
-            for j in range(i+1, len(row)):
-                if (d == 0 and row[i] == 0 and row[j] != 0 or
-                    d == 1 and row[i] != 0 and row[j] == 0):
-                    a = row[i]
-                    row[i] = row[j]
-                    row[j] = a
+        for i in range(len(row)-1):
+            if (d == 0 and row[i] == 0 and row[i+1] != 0 or
+                d == 1 and row[i] != 0 and row[i+1] == 0):
+                a = row[i]
+                row[i] = row[i+1]
+                row[i+1] = a
+                _2048.moveRow(row, d)
     
     def addNumbers(row, d):
         for i in range(3):

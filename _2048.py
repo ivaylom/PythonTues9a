@@ -10,7 +10,7 @@ boardR = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
 boardT = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
 for i in range(4):
     for j in range(4):
-        boardR[i][j] = c.create_rectangle(j*100,i*100,j*100+90, i*100+90, fill="#FFFFFF", outline="black")
+        boardR[i][j] = c.create_rectangle(j*100,i*100,j*100+90, i*100+90, fill="#FFFFFF", outline="black", outlineoffset='-1,-1,-1,-1')
         boardT[i][j] = c.create_text(j*100+45,i*100+45, text="", font=("Purisa", 24))
 
 engine = _2048engine._2048()
