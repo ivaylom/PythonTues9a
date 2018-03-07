@@ -16,12 +16,17 @@ holeSize = 150
 pipeWidth = 60
 
 dot = c.create_oval(x, y, x+r, y+r, fill="blue")
+dotSpeed = 1
+gravity = 0.05
 
+isRunning = False
 def callback(e):
-    if e.keysym == "Up" and c.coords(dot)[1] > minY:
-        c.move(dot, 0, -10)
-    elif e.keysym == "Down" and c.coords(dot)[1] < maxY:
-        c.move(dot, 0, 10)
+    global isRunning
+    global dotSpeed
+    if not(isRunning):
+        t.after(10, onTimer)
+        isRunning = True
+    dotSpeed = -2
 
 def isCollideObj(a, b):
     aPos = c.coords(a)
@@ -70,20 +75,22 @@ counter = 200
 def onTimer():
     global counter
     global pipes
+    global dotSpeed
+    global gravity
     for i in pipes:
-         movePipe(i)
-    t.after(10, onTimer)
-    counter += 1
-    if (counter > 200):
-        pipes.append(createPipe())
-        counter = 0
+        movePipe(i)
+    c.move(dot, 0, dotSpeed)
+    dotSpeed += gravity
     if isCollide():
         print("Collide")
     else:
         print("-")
+    counter += 1
+    if (counter > 200):
+        pipes.append(createPipe())
+        counter = 0
+    t.after(10, onTimer)
 
-t.bind("<Up>", callback)
-t.bind("<Down>", callback)
-t.after(10, onTimer)
+t.bind("<space>", callback)
 
 t.mainloop()
