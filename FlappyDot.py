@@ -57,8 +57,8 @@ def isCollide():
 
 def movePipe(pipe):
     global pipes
-    c.move(pipe[0], -10, 0)
-    c.move(pipe[1], -10, 0)
+    c.move(pipe[0], -1, 0)
+    c.move(pipe[1], -1, 0)
     if (c.coords(pipe[0])[2] < 0):
         c.delete(pipe[0])
         c.delete(pipe[1])
@@ -66,15 +66,15 @@ def movePipe(pipe):
 
 def createNew():
     pipes.append(createPipe())
-counter = 20
+counter = 200
 def onTimer():
     global counter
     global pipes
     for i in pipes:
          movePipe(i)
-    t.after(100, onTimer)
+    t.after(10, onTimer)
     counter += 1
-    if (counter > 20):
+    if (counter > 200):
         pipes.append(createPipe())
         counter = 0
     if isCollide():
@@ -84,6 +84,6 @@ def onTimer():
 
 t.bind("<Up>", callback)
 t.bind("<Down>", callback)
-t.after(100, onTimer)
+t.after(10, onTimer)
 
 t.mainloop()
