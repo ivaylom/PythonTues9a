@@ -16,6 +16,7 @@ holeSize = 150
 pipeWidth = 60
 
 dot = c.create_oval(x, y, x+r, y+r, fill="blue")
+text = c.create_text(width/2, height-20, text="Score: 0", font=('Times', 30))
 dotSpeed = 1
 gravity = 0.05
 
@@ -39,6 +40,7 @@ def isCollideObj(a, b):
         c.itemconfig(b, fill="red")
     else:
         c.itemconfig(b, fill="green")
+    return isCol
 
 def isCollideOneAxis(ax1, ax2, bx1, bx2):
     return ax1 < bx2 and ax2 > bx2 or \
@@ -59,8 +61,16 @@ def isCollide():
             if isCollideObj(dot, rect):
                 return True
     return False
+def isOut():
+    global dot
+    global c
+    pos = c.coords(dot)
+    return pos[1] < 0 or pos[3] > height
+
+didScore = False
 
 def movePipe(pipe):
+    global didScore
     global pipes
     c.move(pipe[0], -1, 0)
     c.move(pipe[1], -1, 0)
@@ -68,6 +78,28 @@ def movePipe(pipe):
         c.delete(pipe[0])
         c.delete(pipe[1])
         pipes.remove(pipe)
+        didScore = False
+
+score = 0
+def incrementScore():
+    global didScore
+    global score
+    global c
+    global text
+    if not(didScore):
+        didScore = True    
+        score=score+1
+        c.itemconfig(text, text="Score: %s" % score)
+
+def isNewScore():
+    global pipes
+    global dot
+    global c
+    dotPos = c.coords(dot)
+    for pipe in pipes:
+        pos = c.coords(pipe[0])
+        if pos[2] < dotPos[0]:
+            incrementScore()
 
 def createNew():
     pipes.append(createPipe())
@@ -79,17 +111,18 @@ def onTimer():
     global gravity
     for i in pipes:
         movePipe(i)
+    isNewScore()
     c.move(dot, 0, dotSpeed)
     dotSpeed += gravity
-    if isCollide():
+    if isCollide() or isOut():
         print("Collide")
     else:
-        print("-")
+        t.after(10, onTimer)
     counter += 1
     if (counter > 200):
         pipes.append(createPipe())
         counter = 0
-    t.after(10, onTimer)
+    
 
 t.bind("<space>", callback)
 
