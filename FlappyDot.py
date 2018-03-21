@@ -20,15 +20,6 @@ text = c.create_text(width/2, height-20, text="Score: 0", font=('Times', 30))
 dotSpeed = 1
 gravity = 0.05
 
-isRunning = False
-def callback(e):
-    global isRunning
-    global dotSpeed
-    if not(isRunning):
-        t.after(10, onTimer)
-        isRunning = True
-    dotSpeed = -2
-
 def isCollideObj(a, b):
     aPos = c.coords(a)
     bPos = c.coords(b)
@@ -47,9 +38,11 @@ def isCollideOneAxis(ax1, ax2, bx1, bx2):
            ax2 > bx1 and ax1 < bx1
 
 def createPipe():
+    global text
     holeY = randint(0, height-holeSize)
     first = c.create_rectangle(width+10, 0, width+10+pipeWidth, holeY, fill="green")
     second = c.create_rectangle(width+10, holeY+holeSize, width+10+pipeWidth, height, fill="green")
+    c.tag_raise(text)
     return (first, second)
 pipes = []
 
@@ -68,12 +61,14 @@ def isOut():
     return pos[1] < 0 or pos[3] > height
 
 didScore = False
-
+speed = 1
 def movePipe(pipe):
     global didScore
     global pipes
-    c.move(pipe[0], -1, 0)
-    c.move(pipe[1], -1, 0)
+    global speed
+    c.move(pipe[0], -speed, 0)
+    c.move(pipe[1], -speed, 0)
+    speed += speed * 0.0002
     if (c.coords(pipe[0])[2] < 0):
         c.delete(pipe[0])
         c.delete(pipe[1])
@@ -103,9 +98,16 @@ def isNewScore():
 
 def createNew():
     pipes.append(createPipe())
-counter = 200
+isRunning = False
+def callback(e):
+    global isRunning
+    global dotSpeed
+    if not(isRunning):
+        pipes.append(createPipe())
+        t.after(10, onTimer)
+        isRunning = True
+    dotSpeed = -2
 def onTimer():
-    global counter
     global pipes
     global dotSpeed
     global gravity
@@ -118,12 +120,9 @@ def onTimer():
         print("Collide")
     else:
         t.after(10, onTimer)
-    counter += 1
-    if (counter > 200):
+    if width - c.coords(pipes[-1][0])[0] > 200:
         pipes.append(createPipe())
-        counter = 0
     
 
 t.bind("<space>", callback)
-
 t.mainloop()
