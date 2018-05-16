@@ -64,19 +64,22 @@ def down():
     if coords[3] < h:
         c.move(bar, 0, barSpeed)
 
-def callback(e):
+def press(e):
     global isUp
     global isDown
     startIfNot()
-    if e.keysym == "Up" and e.state == 262152:
+    if e.keysym == "Up":
         isUp = True
-    if e.keysym == "Up" and e.state == 8:
-        isUp = False
-    if e.keysym == "Down" and e.state == 262152:
+    if e.keysym == "Down":
         isDown = True
-    if e.keysym == "Down" and e.state == 8:
-        isDown = False
 
+def release(e):
+    global isUp
+    global isDown
+    if e.keysym == "Up":
+        isUp = False
+    if e.keysym == "Down":
+        isDown = False
 def incrementScore():
     global text
     global score
@@ -106,8 +109,8 @@ def onTimer():
     else:
         t.after(10, onTimer)
 
-t.bind("<KeyPress-Up>", callback)
-t.bind("<KeyPress-Down>", callback)
-t.bind("<KeyRelease-Up>", callback)
-t.bind("<KeyRelease-Down>", callback)
+t.bind("<KeyPress-Up>", press)
+t.bind("<KeyPress-Down>", press)
+t.bind("<KeyRelease-Up>", release)
+t.bind("<KeyRelease-Down>", release)
 t.mainloop()
