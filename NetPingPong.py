@@ -89,6 +89,9 @@ def incrementScore():
     global text
     global score
     score += 1
+    printScore()
+
+def printScore():
     c.itemconfig(text, text="Score: %s" % score)
 
 def endGame():
@@ -114,8 +117,8 @@ def onTimer():
         endGame()
     else:
         t.after(10, onTimer)
-    dotCoords = c.coords(dot)
-    byteArray = pickle.dumps(dotCoords)
+    packet = (c.coords(dot), c.coords(bar), score)
+    byteArray = pickle.dumps(packet)
     connection.send(byteArray)
 
 import socket
@@ -137,10 +140,13 @@ elif mode == "client":
   connection.connect((address, port))
 print("CONNECTION IS ACTIVE")
 def waitNetwork():
+  global score
   while True:
     bArray = connection.recv(1000)
-    dotCoords = pickle.loads(bArray)
+    dotCoords, barCoords, score = pickle.loads(bArray)
     c.coords(dot, dotCoords[0], dotCoords[1], dotCoords[2], dotCoords[3])
+    c.coords(bar, barCoords[0], barCoords[1], barCoords[2], barCoords[3])
+    printScore()
 
 threading.Thread(target=waitNetwork).start()
 t.mainloop()
